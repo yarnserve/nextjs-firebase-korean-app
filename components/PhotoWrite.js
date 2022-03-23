@@ -5,8 +5,8 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { CameraIcon } from '@heroicons/react/solid'
 
-export default function WriteBtn() {
-  const [word, setWord] = useState({ kor: '', eng: '' })
+export default function PhotoWrite() {
+  const [photo, setPhoto] = useState({ kor: '', eng: '' })
   const [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
@@ -33,13 +33,15 @@ export default function WriteBtn() {
 
   const addText = async (file, url) => {
     const data = {
-      kor: word.kor,
-      eng: word.eng,
+      kor: photo.kor,
+      eng: photo.eng,
       image: file.name,
       url: url,
       timestamp: serverTimestamp()
     }
-    await addDoc(collection(db, 'words'), data)
+    await addDoc(collection(db, 'photos'), data)
+    setPhoto({ kor: '', eng: '' })
+    setIsOpen(false)
   }
 
   return (
@@ -87,15 +89,15 @@ export default function WriteBtn() {
                     type="text"
                     placeholder="korean"
                     className="p-3 border rounded-md"
-                    value={word.kor}
-                    onChange={e => setWord({ ...word, kor: e.target.value })}
+                    value={photo.kor}
+                    onChange={e => setPhoto({ ...photo, kor: e.target.value })}
                   />
                   <input
                     type="text"
                     placeholder="english"
                     className="p-3 border rounded-md"
-                    value={word.eng}
-                    onChange={e => setWord({ ...word, eng: e.target.value })}
+                    value={photo.eng}
+                    onChange={e => setPhoto({ ...photo, eng: e.target.value })}
                   />
                   <input
                     type="file"

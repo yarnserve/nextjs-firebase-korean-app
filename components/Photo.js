@@ -2,14 +2,21 @@ import { VolumeUpIcon, DocumentAddIcon, TrashIcon, CogIcon } from '@heroicons/re
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { SayButton } from 'react-say'
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
-import { useRecoilValue } from 'recoil'
-import { loginState } from '../store'
+import { onAuthStateChanged } from 'firebase/auth'
 
-export default function Word({ id, kor, eng, url, image, timestamp }) {
-  const isLogin = useRecoilValue(loginState)
+export default function Photo({ id, kor, eng, url, image, timestamp }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState(null)
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      setEmail(user.email)
+    } else {
+      setEmail(null)
+    }
+  })
 
   function closeModal() {
     setIsOpen(false)
@@ -73,14 +80,14 @@ export default function Word({ id, kor, eng, url, image, timestamp }) {
                   <div className="flex items-center gap-2">
                     <VolumeUpIcon className="w-6 h-6 text-blue-500" />
                     <SayButton rate={0.5} text={kor}>
-                      <span className="text-blue-500 text-3xl font-bold">{kor}</span>
+                      <span className="text-blue-500 text-2xl font-bold">{kor}</span>
                     </SayButton>
                   </div>
                 </div>
-                <div className="flex items-center px-4 py-3 text-gray-500">
-                  <span className="mr-auto">{eng}</span>
+                <div className="flex items-center px-6 py-3 text-gray-700">
+                  <span className="mr-auto">english : {eng}</span>
                   <DocumentAddIcon className="w-6 h-6 " />
-                  {isLogin && (
+                  {email === process.env.NEXT_PUBLIC_EMAIL && (
                     <div className="flex gap-3 ml-4">
                       <CogIcon className="w-6 h-6" onClick={() => handleEdit(id)} />
                       <TrashIcon className="w-6 h-6 " onClick={() => handleDelete(id)} />

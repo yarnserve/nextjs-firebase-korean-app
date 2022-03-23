@@ -2,12 +2,17 @@ import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { SunIcon, MoonIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from 'react'
+import { auth } from '../firebase'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 
 export default function Top() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   if (!mounted) return null
 
   const toggleTheme = () => {
@@ -24,7 +29,7 @@ export default function Top() {
       </Link>
 
       <div onClick={toggleTheme}>
-        {theme === 'dark' ? <SunIcon className="w-7 h-7" /> : <MoonIcon className="w-7 h-7" />}
+        {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
       </div>
 
       {/* <LoginBtn /> */}
