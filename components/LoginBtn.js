@@ -1,9 +1,9 @@
 import { auth } from '../firebase'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
 import { useEffect } from 'react'
-import { AiFillGoogleCircle } from 'react-icons/ai'
 import { useRecoilState } from 'recoil'
 import { loginState } from '../store'
+import { UserCircleIcon } from '@heroicons/react/solid'
 
 export default function LoginBtn() {
   const [isLogin, setIsLogin] = useRecoilState(loginState)
@@ -40,7 +40,7 @@ export default function LoginBtn() {
           <img src={isLogin.photo} alt="user-photo" className="w-8 h-8 rounded-full" />
         </div>
       ) : (
-        <AiFillGoogleCircle className="w-8 h-8 text-gray-300" onClick={handleLogin} />
+        <UserCircleIcon className="w-8 h-8 text-gray-300" onClick={handleLogin} />
       )}
     </div>
   )

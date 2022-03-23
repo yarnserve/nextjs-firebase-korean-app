@@ -1,9 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { AiFillCamera } from 'react-icons/ai'
 import { db, storage } from '../firebase'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { CameraIcon } from '@heroicons/react/solid'
 
 export default function WriteBtn() {
   const [word, setWord] = useState({ kor: '', eng: '' })
@@ -44,7 +44,7 @@ export default function WriteBtn() {
 
   return (
     <div>
-      <AiFillCamera className="w-10 h-10 text-blue-500 m-auto" onClick={openModal} />
+      <CameraIcon className="w-10 h-10 text-blue-500 m-auto" onClick={openModal} />
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

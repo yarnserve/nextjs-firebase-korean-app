@@ -1,8 +1,6 @@
+import { VolumeUpIcon, DocumentAddIcon, TrashIcon, CogIcon } from '@heroicons/react/solid'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { AiTwotoneSound } from 'react-icons/ai'
-import { MdOutlineAdd } from 'react-icons/md'
-import { HiOutlineCog, HiOutlineTrash } from 'react-icons/hi'
 import { SayButton } from 'react-say'
 import { db } from '../firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
@@ -73,19 +71,19 @@ export default function Word({ id, kor, eng, url, image, timestamp }) {
                 </div>
                 <div className="flex items-center justify-center px-4 py-3 border-b">
                   <div className="flex items-center gap-2">
-                    <AiTwotoneSound className="w-6 h-6 text-blue-500" />
-                    <SayButton text={kor}>
+                    <VolumeUpIcon className="w-6 h-6 text-blue-500" />
+                    <SayButton rate={0.5} text={kor}>
                       <span className="text-blue-500 text-3xl font-bold">{kor}</span>
                     </SayButton>
                   </div>
                 </div>
                 <div className="flex items-center px-4 py-3 text-gray-500">
                   <span className="mr-auto">{eng}</span>
-                  <MdOutlineAdd className="w-6 h-6 " />
+                  <DocumentAddIcon className="w-6 h-6 " />
                   {isLogin && (
                     <div className="flex gap-3 ml-4">
-                      <HiOutlineCog className="w-6 h-6" onClick={() => handleEdit(id)} />
-                      <HiOutlineTrash className="w-6 h-6 " onClick={() => handleDelete(id)} />
+                      <CogIcon className="w-6 h-6" onClick={() => handleEdit(id)} />
+                      <TrashIcon className="w-6 h-6 " onClick={() => handleDelete(id)} />
                     </div>
                   )}
                 </div>

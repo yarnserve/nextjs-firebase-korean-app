@@ -22,8 +22,6 @@ export default function WordList() {
     })
   }, [])
 
-  console.log(words)
-
   return (
     <div>
       <div>{isLogin && <WriteBtn />}</div>
