@@ -45,7 +45,7 @@ export default function PhotoWrite() {
 
   return (
     <div>
-      <CameraIcon className="w-10 h-10 text-blue-500 m-auto" onClick={openModal} />
+      <CameraIcon className="w-6 h-6 text-blue-500 m-auto" onClick={openModal} />
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -80,21 +80,21 @@ export default function PhotoWrite() {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Dialog.Title as="h3" className="text-lg font-bold mb-3">
+                <Dialog.Title as="h3" className="text-lg font-bold mb-3 text-black">
                   Write...
                 </Dialog.Title>
                 <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
                   <input
                     type="text"
                     placeholder="korean"
-                    className="p-3 border rounded-md"
+                    className="p-3 border rounded-md bg-white"
                     value={photo.kor}
                     onChange={e => setPhoto({ ...photo, kor: e.target.value })}
                   />
                   <input
                     type="text"
                     placeholder="english"
-                    className="p-3 border rounded-md"
+                    className="p-3 border rounded-md bg-white"
                     value={photo.eng}
                     onChange={e => setPhoto({ ...photo, eng: e.target.value })}
                   />

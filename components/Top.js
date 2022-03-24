@@ -1,13 +1,26 @@
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
-import { SunIcon, MoonIcon } from '@heroicons/react/solid'
+import { SunIcon, MoonIcon, UserRemoveIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
+import Nav from './Nav'
+import PhotoWrite from './PhotoWrite'
 
 export default function Top() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [email, setEmail] = useState(null)
+
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        setEmail(user.email)
+      } else {
+        setEmail(null)
+      }
+    })
+  }, [email])
 
   useEffect(() => {
     setMounted(true)
@@ -19,20 +32,34 @@ export default function Top() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      setEmail(null)
+    })
+  }
+
   return (
-    <div className="flex justify-between px-4 py-4 items-end">
+    <div className="flex items-center py-4">
+      <Nav />
       <Link href="/">
         <div className="flex items-center gap-1">
-          <p className="text-sm">learning</p>
-          <div className="text-xl font-bold ">Korean</div>
+          <span className="text-sm">learning</span>
+          <span className="text-xl font-bold ">Korean</span>
         </div>
       </Link>
 
-      <div onClick={toggleTheme}>
-        {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
-      </div>
+      <div className="flex items-center ml-auto">
+        {email === process.env.NEXT_PUBLIC_EMAIL && (
+          <div className="flex gap-2 mr-2">
+            <PhotoWrite />
+            <UserRemoveIcon className="w-6 h-6 text-red-500" onClick={handleLogout} />
+          </div>
+        )}
 
-      {/* <LoginBtn /> */}
+        <span onClick={toggleTheme}>
+          {theme === 'dark' ? <SunIcon className="w-6 h-6" /> : <MoonIcon className="w-6 h-6" />}
+        </span>
+      </div>
     </div>
   )
 }

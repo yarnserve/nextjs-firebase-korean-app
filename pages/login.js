@@ -1,4 +1,3 @@
-import Top from '../components/Top'
 import { auth } from '../firebase'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import { useRouter } from 'next/router'
@@ -10,25 +9,15 @@ export default function Login() {
 
   const handleLogin = async e => {
     signInWithPopup(auth, provider).then(result => {
-      console.log(result.user)
       router.push('/')
     })
   }
 
-  const handleLogout = () => {
-    signOut(auth)
-    router.push('/')
-  }
-
   return (
-    <div>
-      <Top />
-      <div className="pt-10 flex flex-col items-center gap-3">
-        <button onClick={handleLogin} className="px-6 py-3 bg-blue-500 text-white text-sm rounded-lg">
-          signin with Google
-        </button>
-        <button onClick={handleLogout}>logout</button>
-      </div>
+    <div className="pt-10 flex flex-col items-center gap-3">
+      <button onClick={handleLogin} className="px-6 py-3 bg-blue-500 text-white text-sm rounded-lg">
+        signin with Google
+      </button>
     </div>
   )
 }

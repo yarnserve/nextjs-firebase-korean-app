@@ -1,13 +1,25 @@
 import { VolumeUpIcon, TrashIcon } from '@heroicons/react/solid'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { SayButton } from 'react-say'
-import { db, storage } from '../firebase'
+import { db, storage, auth } from '../firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { ref, deleteObject } from 'firebase/storage'
+import { onAuthStateChanged } from 'firebase/auth'
 
-export default function Photo({ id, kor, eng, url, image, timestamp, email }) {
+export default function Photo({ id, kor, eng, url, image }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState(null)
+
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        setEmail(user.email)
+      } else {
+        setEmail(null)
+      }
+    })
+  }, [email])
 
   function closeModal() {
     setIsOpen(false)
