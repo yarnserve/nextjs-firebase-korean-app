@@ -20,7 +20,6 @@ export default function PhotoWrite() {
   const handleSubmit = e => {
     e.preventDefault()
     const file = e.target.file.files[0]
-    console.log(file)
     uploadImg(file)
   }
 

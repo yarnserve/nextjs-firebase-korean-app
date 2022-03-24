@@ -1,22 +1,13 @@
-import { VolumeUpIcon, DocumentAddIcon, TrashIcon, CogIcon } from '@heroicons/react/solid'
+import { VolumeUpIcon, TrashIcon } from '@heroicons/react/solid'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { SayButton } from 'react-say'
-import { db, auth } from '../firebase'
+import { db, storage } from '../firebase'
 import { doc, deleteDoc } from 'firebase/firestore'
-import { onAuthStateChanged } from 'firebase/auth'
+import { ref, deleteObject } from 'firebase/storage'
 
-export default function Photo({ id, kor, eng, url, image, timestamp }) {
+export default function Photo({ id, kor, eng, url, image, timestamp, email }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [email, setEmail] = useState(null)
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      setEmail(user.email)
-    } else {
-      setEmail(null)
-    }
-  })
 
   function closeModal() {
     setIsOpen(false)
@@ -27,12 +18,15 @@ export default function Photo({ id, kor, eng, url, image, timestamp }) {
   }
 
   const handleDelete = async id => {
-    setIsOpen(false)
-    await deleteDoc(doc(db, 'words', id))
-  }
-
-  const handleEdit = async id => {
-    console.log(id)
+    const imageRef = ref(storage, `images/${image}`)
+    deleteObject(imageRef)
+      .then(() => {
+        deleteDoc(doc(db, 'photos', id))
+        setIsOpen(false)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   return (
@@ -72,27 +66,23 @@ export default function Photo({ id, kor, eng, url, image, timestamp }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-3xl">
+              <div className="inline-block w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-gray-50 shadow-xl rounded-3xl">
                 <div>
                   <img src={url} alt="" className="aspect-square object-cover" />
                 </div>
-                <div className="flex items-center justify-center px-4 py-3 border-b">
+                <div className="p-6 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <VolumeUpIcon className="w-6 h-6 text-blue-500" />
                     <SayButton rate={0.5} text={kor}>
-                      <span className="text-blue-500 text-2xl font-bold">{kor}</span>
+                      <span className="text-blue-500 text-2xl font-bold ">{kor}</span>
                     </SayButton>
                   </div>
-                </div>
-                <div className="flex items-center px-6 py-3 text-gray-700">
-                  <span className="mr-auto">english : {eng}</span>
-                  <DocumentAddIcon className="w-6 h-6 " />
-                  {email === process.env.NEXT_PUBLIC_EMAIL && (
-                    <div className="flex gap-3 ml-4">
-                      <CogIcon className="w-6 h-6" onClick={() => handleEdit(id)} />
-                      <TrashIcon className="w-6 h-6 " onClick={() => handleDelete(id)} />
-                    </div>
-                  )}
+                  <div className="text-sm text-gray-500 flex items-center gap-3">
+                    <span>{eng}</span>
+                    {email === process.env.NEXT_PUBLIC_EMAIL && (
+                      <TrashIcon className="w-6 h-6 text-red-500" onClick={() => handleDelete(id)} />
+                    )}
+                  </div>
                 </div>
               </div>
             </Transition.Child>

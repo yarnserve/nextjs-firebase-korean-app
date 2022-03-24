@@ -3,23 +3,19 @@ import { db, auth } from '../firebase'
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
 import Photo from './Photo'
 import PhotoWrite from './PhotoWrite'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 
 export default function PhotoList() {
   const [photos, setPhotos] = useState([])
   const [email, setEmail] = useState(null)
 
-  onAuthStateChanged(
-    auth,
-    user => {
-      if (user) {
-        setEmail(user.email)
-      } else {
-        setEmail(null)
-      }
-    },
-    [email]
-  )
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      setEmail(user.email)
+    } else {
+      setEmail(null)
+    }
+  })
 
   useEffect(() => {
     const q = query(collection(db, 'photos'), orderBy('timestamp', 'desc'))
@@ -33,16 +29,11 @@ export default function PhotoList() {
     })
   }, [])
 
-  const handleLogout = () => {
-    signOut(auth)
-  }
-
   return (
     <div>
       {email === process.env.NEXT_PUBLIC_EMAIL && (
         <div>
           <PhotoWrite />
-          <button onClick={handleLogout}>logout</button>
         </div>
       )}
       <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9 gap-5 p-5">
@@ -55,6 +46,7 @@ export default function PhotoList() {
             url={photo.url}
             image={photo.image}
             timestamp={photo.timestamp}
+            email={email}
           />
         ))}
       </div>
