@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import Nav from './Nav'
-import PhotoWrite from './PhotoWrite'
+import WritePhoto from './WrtiePhoto'
+import WriteEssential from './WriteEssential'
+// import WriteSentence from './WriteSentence'
 
 export default function Top() {
   const { theme, setTheme } = useTheme()
@@ -42,7 +44,7 @@ export default function Top() {
     <div className="flex items-center py-4">
       <Nav />
       <Link href="/">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 cursor-pointer">
           <span className="text-sm">learning</span>
           <span className="text-xl font-bold ">Korean</span>
         </div>
@@ -51,8 +53,10 @@ export default function Top() {
       <div className="flex items-center ml-auto">
         {email === process.env.NEXT_PUBLIC_EMAIL && (
           <div className="flex gap-2 mr-2">
-            <PhotoWrite />
-            <UserRemoveIcon className="w-6 h-6 text-red-500" onClick={handleLogout} />
+            <WritePhoto />
+            <WriteEssential />
+            {/* <WriteSentence /> */}
+            <UserRemoveIcon className="w-6 h-6 text-red-500 cursor-pointer" onClick={handleLogout} />
           </div>
         )}
 

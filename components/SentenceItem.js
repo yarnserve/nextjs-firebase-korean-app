@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Words() {
+export default function SentenceItem() {
   return (
     <div>
-      <p>words....</p>
+      <p>aa</p>
     </div>
   )
 }

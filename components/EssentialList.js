@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { db } from '../firebase'
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
-import PhotoItem from './PhotoItem'
+import EssentialItem from './Essentialtem'
 
-export default function PhotoList() {
+export default function EssentialList() {
   const [words, setWords] = useState([])
 
   useEffect(() => {
-    const q = query(collection(db, 'photo'), orderBy('timestamp', 'desc'))
+    const q = query(collection(db, 'essential'), orderBy('timestamp', 'desc'))
     onSnapshot(q, snapshot => {
       setWords(
         snapshot.docs.map(doc => ({
@@ -17,11 +17,10 @@ export default function PhotoList() {
       )
     })
   }, [])
-
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
       {words.map(word => (
-        <PhotoItem
+        <EssentialItem
           key={word.id}
           id={word.id}
           kor={word.kor}

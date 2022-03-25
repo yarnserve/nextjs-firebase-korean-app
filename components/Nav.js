@@ -18,17 +18,19 @@ export default function Nav() {
       ></Transition>
 
       <Popover.Panel className="absolute z-10">
-        <div className="flex flex-col gap-3 bg-blue-500 text-white px-4 py-6 rounded-xl whitespace-nowrap">
-          <Link href="/">
-            <a>photo words</a>
-          </Link>
-          <Link href="/words">
-            <a>200 essential words</a>
-          </Link>
-          <Link href="/sentences">
-            <a>sentences</a>
-          </Link>
-        </div>
+        {({ close }) => (
+          <div className="flex flex-col gap-3 bg-blue-500 text-white px-4 py-6 rounded-xl whitespace-nowrap">
+            <Link href="/">
+              <a onClick={() => close()}>Photo words</a>
+            </Link>
+            <Link href="/essential">
+              <a onClick={() => close()}>200 essential words</a>
+            </Link>
+            <Link href="/sentence">
+              <a onClick={() => close()}>Sentences</a>
+            </Link>
+          </div>
+        )}
       </Popover.Panel>
     </Popover>
   )

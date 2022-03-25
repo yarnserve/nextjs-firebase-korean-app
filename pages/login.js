@@ -9,6 +9,7 @@ export default function Login() {
 
   const handleLogin = async e => {
     signInWithPopup(auth, provider).then(result => {
+      console.log(result.user)
       router.push('/')
     })
   }

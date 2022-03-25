@@ -7,19 +7,17 @@ import { doc, deleteDoc } from 'firebase/firestore'
 import { ref, deleteObject } from 'firebase/storage'
 import { onAuthStateChanged } from 'firebase/auth'
 
-export default function Photo({ id, kor, eng, url, image }) {
+export default function PhotoItem({ id, kor, eng, url, image }) {
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState(null)
 
-  useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        setEmail(user.email)
-      } else {
-        setEmail(null)
-      }
-    })
-  }, [email])
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      setEmail(user.email)
+    } else {
+      setEmail(null)
+    }
+  })
 
   function closeModal() {
     setIsOpen(false)
@@ -30,10 +28,10 @@ export default function Photo({ id, kor, eng, url, image }) {
   }
 
   const handleDelete = async id => {
-    const imageRef = ref(storage, `images/${image}`)
+    const imageRef = ref(storage, `photo/${image}`)
     deleteObject(imageRef)
       .then(() => {
-        deleteDoc(doc(db, 'photos', id))
+        deleteDoc(doc(db, 'photo', id))
         setIsOpen(false)
       })
       .catch(error => {
